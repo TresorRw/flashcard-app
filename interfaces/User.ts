@@ -1,5 +1,5 @@
 export interface registerUserProps {
-    usernames: string,
+    username: string,
     display_name: string,
     password: string
 }

@@ -1,6 +1,5 @@
 export const typeDefs = `#graphql
 
-    # Important Types
     type User {
         id: Int!
         display_name: String!
@@ -24,16 +23,16 @@ export const typeDefs = `#graphql
         message: String!
         data: User
     }
+
     type GeneralRegisterMessage {
         message: String!
         data: User
     }
 
-
     # Queries
     type Query {
         getUsers: [User!]
-        getSingleUsers(username: String!): User!
+        getSingleUser(username: String!): User
         getFlashCards: [FlashCard!]
         getUserFlashCards(userId: Int!): User!
         getSingleFleshCard(flashcard: Int!): FlashCard!
