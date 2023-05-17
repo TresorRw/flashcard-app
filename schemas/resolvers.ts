@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client"
-import { loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User.js";
+import { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User.js";
 import { hashString } from "../utils/pwdChecker.js";
 import bcrypt from "bcrypt";
 import { encode } from "../utils/tokenCheck.js";
+import { createFlashCartProps } from "../interfaces/Flashcard.js";
 
 const prisma = new PrismaClient();
 
@@ -55,6 +56,16 @@ export const resolvers = {
                     const token = encode({ id: userMatch.id, username: userMatch.username, display_name: userMatch.display_name });
                     return { message: "Login Successfully!", data: userMatch, token }
                 }
+            }
+        },
+        async createFlashCard(parent, args: createFlashCartProps, contextValue: loggedInUser) {
+            if (!contextValue.user) return { message: "Please Login to continue." }
+            const newFC = { question: args.question, answer: args.answer, topic: args.topic, userId: contextValue.user.id };
+            const saveFlashCard = await prisma.flashCard.create({ data: newFC })
+            if (saveFlashCard) {
+                return { message: "Your flash card has been saved", data: saveFlashCard }
+            } else {
+                return { message: "Your flash card has not been saved" }
             }
         }
     }

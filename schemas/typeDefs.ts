@@ -30,6 +30,11 @@ export const typeDefs = `#graphql
         data: User
     }
 
+    type GeneralFlashMessage {
+        message: String!
+        data: FlashCard
+    }
+
     # Queries
     type Query {
         getUsers: [User!]
@@ -42,6 +47,7 @@ export const typeDefs = `#graphql
     type Mutation {
         registerUser(username: String!, display_name: String!, password: String!): GeneralRegisterMessage!
         loginUser(username: String!, password: String!): GeneralLoginMessage!
+        createFlashCard(question: String!, answer: String!, topic: String!): GeneralFlashMessage!
     }
 
 

@@ -22,3 +22,15 @@ export interface tokenPayload {
     username: string,
     display_name: string,
 }
+
+export interface loggedInUserProps {
+    id: number,
+    username: string,
+    display_name: string
+    iat: number
+    exp: number
+}
+
+export interface loggedInUser {
+    user: loggedInUserProps
+}
