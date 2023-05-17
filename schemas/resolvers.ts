@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client"
-import { registerUserProps, singleUserProps, userIdProps } from "../interfaces/User.js";
+import { loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User.js";
 import { hashString } from "../utils/pwdChecker.js";
+import bcrypt from "bcrypt";
+import { encode } from "../utils/tokenCheck.js";
+
 const prisma = new PrismaClient();
 
 export const resolvers = {
@@ -36,6 +39,22 @@ export const resolvers = {
                 }
             } else {
                 return { message: "Username is already in use." }
+            }
+        },
+        async loginUser(parent, args: loginUserProps) {
+            const userData = { username: args.username.toLowerCase(), password: args.password };
+            const userMatch = await prisma.user.findFirst({ where: { username: userData.username } })
+            if (!userMatch) {
+                return { message: "These credentials are not familiar to us, try again." }
+            } else {
+                const savedPwd = userMatch.password;
+                const checkMatch = await bcrypt.compare(userData.password, savedPwd);
+                if (!checkMatch) {
+                    return { message: "Password mismatch, try again." }
+                } else {
+                    const token = encode({ id: userMatch.id, username: userMatch.username, display_name: userMatch.display_name });
+                    return { message: "Login Successfully!", data: userMatch, token }
+                }
             }
         }
     }

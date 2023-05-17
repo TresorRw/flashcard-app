@@ -22,6 +22,7 @@ export const typeDefs = `#graphql
     type GeneralLoginMessage {
         message: String!
         data: User
+        token: String
     }
 
     type GeneralRegisterMessage {
@@ -40,7 +41,7 @@ export const typeDefs = `#graphql
 
     type Mutation {
         registerUser(username: String!, display_name: String!, password: String!): GeneralRegisterMessage!
-        loginUSer(username: String!, password: String!): GeneralLoginMessage!
+        loginUser(username: String!, password: String!): GeneralLoginMessage!
     }
 
 

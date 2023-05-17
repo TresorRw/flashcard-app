@@ -16,3 +16,9 @@ export interface singleUserProps {
 export interface userIdProps {
     userId: number
 }
+
+export interface tokenPayload {
+    id: number,
+    username: string,
+    display_name: string,
+}
