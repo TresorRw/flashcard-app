@@ -33,7 +33,7 @@ export const typeDefs = `#graphql
     # Queries
     type Query {
         getUsers: [User!]
-        getSingleUsers(id: Int, username: String): User!
+        getSingleUsers(username: String!): User!
         getFlashCards: [FlashCard!]
         getUserFlashCards(userId: Int!): User!
         getSingleFleshCard(flashcard: Int!): FlashCard!
