@@ -21,15 +21,15 @@ export const resolvers = {
             const flashcards = await prisma.flashCard.findMany()
             return flashcards
         },
-        async getSingleUser(parent, args: singleUserProps) {
+        async getSingleUser(_: any, args: singleUserProps) {
             const matches = await prisma.user.findFirst({ where: { username: args.username.toLowerCase() } })
             return matches;
         },
-        async getUserFlashCards(parent, args: userIdProps) {
+        async getUserFlashCards(_: any, args: userIdProps) {
             const matches = await prisma.flashCard.findMany({ where: { userId: args.userId } });
             return matches;
         },
-        async getSingleFlashCard(parent, args: singleFlashCardProp) {
+        async getSingleFlashCard(_: any, args: singleFlashCardProp) {
             const matches = await prisma.flashCard.findFirst({ where: { id: args.flashcard } });
             if (matches) {
                 return { message: `Flashcard related with ${args.flashcard}`, data: { ...matches, addDate: new Date(matches?.addDate as Date).toLocaleString() } }
@@ -40,20 +40,20 @@ export const resolvers = {
     },
 
     User: {
-        FlashCards: async (parent: UserProps) => {
-            const related = await prisma.flashCard.findMany({ where: { userId: parent.id } })
+        FlashCards: async (_: UserProps) => {
+            const related = await prisma.flashCard.findMany({ where: { userId: _.id } })
             return related;
         }
     },
     FlashCard: {
-        User: async (parent: FlashCardProps) => {
-            const related = await prisma.user.findFirst({ where: { id: parent.userId } })
+        User: async (_: FlashCardProps) => {
+            const related = await prisma.user.findFirst({ where: { id: _.userId } })
             return related;
         }
     },
 
     Mutation: {
-        async registerUser(parent, args: registerUserProps) {
+        async registerUser(_: any, args: registerUserProps) {
             const hashedPassword = await hashString(args.password);
             const newUser = { username: args.username.toLowerCase(), password: hashedPassword, display_name: args.display_name }
             const checkUnique = await prisma.user.findFirst({ where: { username: args.username.toLowerCase() } })
@@ -68,7 +68,7 @@ export const resolvers = {
                 return { message: "Username is already in use." }
             }
         },
-        async loginUser(parent, args: loginUserProps) {
+        async loginUser(_: any, args: loginUserProps) {
             const userData = { username: args.username.toLowerCase(), password: args.password };
             const userMatch = await prisma.user.findFirst({ where: { username: userData.username } })
             if (!userMatch) {
@@ -84,7 +84,7 @@ export const resolvers = {
                 }
             }
         },
-        async createFlashCard(parent, args: createFlashCardProps, contextValue: loggedInUser) {
+        async createFlashCard(_: any, args: createFlashCardProps, contextValue: loggedInUser) {
             if (authenticationCheck(contextValue) === true) {
                 const newFC = { question: args.question, answer: args.answer, topic: args.topic, userId: contextValue.user.id };
                 const saveFlashCard = await prisma.flashCard.create({ data: newFC })
@@ -98,7 +98,7 @@ export const resolvers = {
             }
 
         },
-        async updateFlashCard(parent, args: editFlashCardProps, contextValue: loggedInUser) {
+        async updateFlashCard(_: any, args: editFlashCardProps, contextValue: loggedInUser) {
             if (authenticationCheck(contextValue) === true) {
                 const checkCard = await prisma.flashCard.findFirst({ where: { id: args.fc_id, userId: contextValue.user.id } });
                 if (!checkCard) return { message: `We can not find flash card with ${args.fc_id} in your account.` };
@@ -113,7 +113,7 @@ export const resolvers = {
                 return authenticationCheck(contextValue)
             }
         },
-        async deleteFlashCard(_, args: singleFlashCardProp, contextValue: loggedInUser) {
+        async deleteFlashCard(_: any, args: singleFlashCardProp, contextValue: loggedInUser) {
             if (authenticationCheck(contextValue) === true) {
                 const isAvailable = await prisma.flashCard.findFirst({ where: { id: args.flashcard, userId: contextValue.user.id } })
                 if (isAvailable) {
@@ -125,7 +125,7 @@ export const resolvers = {
                 return authenticationCheck(contextValue)
             }
         },
-        async changeStatus(parent, args: statusFlashCardProps, contextValue: loggedInUser) {
+        async changeStatus(_: any, args: statusFlashCardProps, contextValue: loggedInUser) {
             if (authenticationCheck(contextValue) === true) {
                 const checkCard = await prisma.flashCard.findFirst({ where: { id: args.fc_id, userId: contextValue.user.id } });
                 if (!checkCard) return { message: `We can not find flash card with ${args.fc_id} in your account.` };
