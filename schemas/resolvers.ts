@@ -3,7 +3,7 @@ import { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userI
 import { hashString } from "../utils/pwdChecker.js";
 import bcrypt from "bcrypt";
 import { encode } from "../utils/tokenCheck.js";
-import { createFlashCartProps, editFlashCartProps } from "../interfaces/Flashcard.js";
+import { createFlashCardProps, editFlashCardProps, statusFlashCardProps } from "../interfaces/Flashcard.js";
 
 const prisma = new PrismaClient();
 
@@ -58,7 +58,7 @@ export const resolvers = {
                 }
             }
         },
-        async createFlashCard(parent, args: createFlashCartProps, contextValue: loggedInUser) {
+        async createFlashCard(parent, args: createFlashCardProps, contextValue: loggedInUser) {
             if (!contextValue.user) return { message: "Please Login to continue." }
             const newFC = { question: args.question, answer: args.answer, topic: args.topic, userId: contextValue.user.id };
             const saveFlashCard = await prisma.flashCard.create({ data: newFC })
@@ -68,7 +68,7 @@ export const resolvers = {
                 return { message: "Your flash card has not been saved" }
             }
         },
-        async updateFlashCard(parent, args: editFlashCartProps, contextValue: loggedInUser) {
+        async updateFlashCard(parent, args: editFlashCardProps, contextValue: loggedInUser) {
             if (!contextValue.user) return { message: "Please login to continue." }
             const checkCard = await prisma.flashCard.findFirst({ where: { id: args.fc_id, userId: contextValue.user.id } });
             if (!checkCard) return { message: `We can not find flash card with ${args.fc_id} in your account.` };
@@ -79,6 +79,13 @@ export const resolvers = {
             } else {
                 return { message: "Flash card not updated successfully." }
             }
+        },
+        async changeStatus(parent, args: statusFlashCardProps, contextValue: loggedInUser) {
+            if (!contextValue.user) return { message: "Please login to continue." }
+            const checkCard = await prisma.flashCard.findFirst({ where: { id: args.fc_id, userId: contextValue.user.id } });
+            if (!checkCard) return { message: `We can not find flash card with ${args.fc_id} in your account.` };
+            const changeStatus = await prisma.flashCard.update({ where: { id: args.fc_id }, data: { isComplete: !checkCard.isComplete } });
+            if (changeStatus) return { message: "Status updated successfully.", status: changeStatus.isComplete }
         }
     }
 }

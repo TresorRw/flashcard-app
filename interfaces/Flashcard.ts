@@ -1,12 +1,17 @@
-export interface createFlashCartProps {
+export interface createFlashCardProps {
     question: string,
     answer: string,
     topic: string
 }
 
-export interface editFlashCartProps {
+export interface editFlashCardProps {
     fc_id: number
     question: string,
     answer: string,
     topic: string
+}
+
+export interface statusFlashCardProps {
+    fc_id: number
+    status: boolean
 }

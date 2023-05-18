@@ -16,7 +16,6 @@ export const decode = (token: string) => {
         const payload = jwt.verify(token, JWT_SECRET_KEY);
         return payload;
     } catch (e) {
-        console.log(e)
         return e;
     }
 }
