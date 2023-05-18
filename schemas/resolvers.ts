@@ -114,6 +114,18 @@ export const resolvers = {
                 return authenticationCheck(contextValue)
             }
         },
+        async deleteFlashCard(_, args: singleFlashCardProp, contextValue: loggedInUser) {
+            if (authenticationCheck(contextValue) === true) {
+                const isAvailable = await prisma.flashCard.findFirst({ where: { id: args.flashcard, userId: contextValue.user.id } })
+                if (isAvailable) {
+                    const deleteFc = await prisma.flashCard.delete({ where: { id: args.flashcard } })
+                    if (deleteFc) return { message: "Flash card deleted successfully." }
+                }
+                return { message: "We can not delete due to missing flashcard." }
+            } else {
+                return authenticationCheck(contextValue)
+            }
+        },
         async changeStatus(parent, args: statusFlashCardProps, contextValue: loggedInUser) {
             if (authenticationCheck(contextValue) === true) {
                 const checkCard = await prisma.flashCard.findFirst({ where: { id: args.fc_id, userId: contextValue.user.id } });
