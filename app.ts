@@ -26,9 +26,7 @@ const server = new ApolloServer<AppContext>({
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
 });
 
-
 await server.start();
-
 app.use('/graphql', expressMiddleware(server, {
     context: async ({ req, res }) => {
         const token = handleToken(req.headers.authorization as string);

@@ -26,6 +26,20 @@ export const resolvers = {
             return matches;
         }
     },
+
+    User: {
+        FlashCards: async (parent) => {
+            const related = await prisma.flashCard.findMany({ where: { userId: parent.id } })
+            return related;
+        }
+    },
+    FlashCard: {
+        User: async (parent) => {
+            const related = await prisma.user.findFirst({ where: { id: parent.userId } })
+            return related;
+        }
+    },
+
     Mutation: {
         async registerUser(parent, args: registerUserProps) {
             const hashedPassword = await hashString(args.password);
