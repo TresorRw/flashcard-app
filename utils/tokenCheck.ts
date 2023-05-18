@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { tokenPayload } from "../interfaces/User.js";
+import type { tokenPayload } from "../interfaces/User";
 import { config } from "dotenv";
 config();
 

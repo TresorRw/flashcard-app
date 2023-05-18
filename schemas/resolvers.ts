@@ -1,12 +1,11 @@
 import { PrismaClient } from "@prisma/client"
-import { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User.js";
-import { hashString } from "../utils/pwdChecker.js";
+import type { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User";
+import { hashString } from "../utils/pwdChecker";
 import bcrypt from "bcrypt";
-import { encode } from "../utils/tokenCheck.js";
-import { createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard.js";
+import { encode } from "../utils/tokenCheck";
+import type { createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard";
 
 const prisma = new PrismaClient();
-
 const authenticationCheck = (contextValue: loggedInUser) => {
     if (!contextValue.user) return { message: "Please login to continue..." };
     return true;

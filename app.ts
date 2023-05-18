@@ -7,7 +7,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { resolvers } from "./schemas/resolvers";
 import { typeDefs } from "./schemas/typeDefs";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import { AppContext } from "./interfaces/AppContext";
+import type { AppContext } from "./interfaces/AppContext";
 import { context } from "./utils/Context";
 config();
 
@@ -27,5 +27,5 @@ server
     .start()
     .then(() => {
         app.use('/graphql', expressMiddleware(server, { context: context.context }))
-        app.listen(PORT, () => console.log(`🚀 http://localhost:${PORT}/graphql`));
+        app.listen(PORT, () => console.log(`🚀 🛜    http://localhost:${PORT}/graphql`));
     })
