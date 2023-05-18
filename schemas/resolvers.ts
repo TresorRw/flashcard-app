@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client"
-import type { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User";
+import type { UserProps, loggedInUser, loginUserProps, registerUserProps, singleUserProps, userIdProps } from "../interfaces/User";
 import { hashString } from "../utils/pwdChecker";
 import bcrypt from "bcrypt";
 import { encode } from "../utils/tokenCheck";
-import type { createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard";
+import type { FlashCardProps, createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard";
 
 const prisma = new PrismaClient();
 const authenticationCheck = (contextValue: loggedInUser) => {
@@ -40,13 +40,13 @@ export const resolvers = {
     },
 
     User: {
-        FlashCards: async (parent) => {
+        FlashCards: async (parent: UserProps) => {
             const related = await prisma.flashCard.findMany({ where: { userId: parent.id } })
             return related;
         }
     },
     FlashCard: {
-        User: async (parent) => {
+        User: async (parent: FlashCardProps) => {
             const related = await prisma.user.findFirst({ where: { id: parent.userId } })
             return related;
         }

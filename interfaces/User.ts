@@ -34,3 +34,11 @@ export interface loggedInUserProps {
 export interface loggedInUser {
     user: loggedInUserProps
 }
+
+export interface UserProps {
+    id: number,
+    username: string,
+    display_name: string,
+    password: string,
+    regDate: string
+}

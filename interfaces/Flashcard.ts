@@ -19,3 +19,13 @@ export interface statusFlashCardProps {
 export interface singleFlashCardProp {
     flashcard: number
 }
+
+export interface FlashCardProps {
+    id: number,
+    question: string,
+    answer: string,
+    topic: string,
+    addDate: string
+    isComplete: boolean,
+    userId: number
+}
