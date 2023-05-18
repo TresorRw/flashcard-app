@@ -1,4 +1,4 @@
-### Event management system
+### Flashcard APP
 This REPO contains all of the functionalities to serve frontend for this project
 
 Table of Contents
