@@ -15,3 +15,7 @@ export interface statusFlashCardProps {
     fc_id: number
     status: boolean
 }
+
+export interface singleFlashCardProp {
+    flashcard: number
+}

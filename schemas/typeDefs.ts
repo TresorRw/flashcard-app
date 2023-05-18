@@ -25,6 +25,11 @@ export const typeDefs = `#graphql
         token: String
     }
 
+    type FlashCardMessage {
+        message: String!
+        data: FlashCard
+    }
+
     type GeneralRegisterMessage {
         message: String!
         data: User
@@ -45,8 +50,8 @@ export const typeDefs = `#graphql
         getUsers: [User!]
         getSingleUser(username: String!): User
         getFlashCards: [FlashCard!]
-        getUserFlashCards(userId: Int!): User!
-        getSingleFleshCard(flashcard: Int!): FlashCard!
+        getUserFlashCards(userId: Int!): [FlashCard]
+        getSingleFlashCard(flashcard: Int!): FlashCardMessage!
     }
 
     type Mutation {

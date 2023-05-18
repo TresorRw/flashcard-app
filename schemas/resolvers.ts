@@ -3,7 +3,7 @@ import { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userI
 import { hashString } from "../utils/pwdChecker.js";
 import bcrypt from "bcrypt";
 import { encode } from "../utils/tokenCheck.js";
-import { createFlashCardProps, editFlashCardProps, statusFlashCardProps } from "../interfaces/Flashcard.js";
+import { createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard.js";
 
 const prisma = new PrismaClient();
 
@@ -18,12 +18,20 @@ export const resolvers = {
             return flashcards
         },
         async getSingleUser(parent, args: singleUserProps) {
-            const matches = await prisma.user.findFirstOrThrow({ where: { username: args.username } })
+            const matches = await prisma.user.findFirst({ where: { username: args.username.toLowerCase() } })
             return matches;
         },
         async getUserFlashCards(parent, args: userIdProps) {
-            const matches = await prisma.user.findFirstOrThrow({ where: { id: args.userId } });
+            const matches = await prisma.flashCard.findMany({ where: { userId: args.userId } });
             return matches;
+        },
+        async getSingleFlashCard(parent, args: singleFlashCardProp) {
+            const matches = await prisma.flashCard.findFirst({ where: { id: args.flashcard } });
+            if (matches) {
+                return { message: `Flashcard related with ${args.flashcard}`, data: { ...matches, addDate: new Date(matches?.addDate as Date).toLocaleString() } }
+            } else {
+                return { message: "Flashcard not found.", data: null }
+            }
         }
     },
 
