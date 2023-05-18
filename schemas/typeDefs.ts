@@ -42,7 +42,7 @@ export const typeDefs = `#graphql
 
     type StatusChangeMessage {
         message: String!,
-        status: Boolean!
+        status: Boolean
     }
 
     # Queries
