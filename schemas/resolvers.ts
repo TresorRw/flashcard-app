@@ -3,7 +3,7 @@ import { loggedInUser, loginUserProps, registerUserProps, singleUserProps, userI
 import { hashString } from "../utils/pwdChecker.js";
 import bcrypt from "bcrypt";
 import { encode } from "../utils/tokenCheck.js";
-import { createFlashCartProps } from "../interfaces/Flashcard.js";
+import { createFlashCartProps, editFlashCartProps } from "../interfaces/Flashcard.js";
 
 const prisma = new PrismaClient();
 
@@ -66,6 +66,18 @@ export const resolvers = {
                 return { message: "Your flash card has been saved", data: saveFlashCard }
             } else {
                 return { message: "Your flash card has not been saved" }
+            }
+        },
+        async updateFlashCard(parent, args: editFlashCartProps, contextValue: loggedInUser) {
+            if (!contextValue.user) return { message: "Please login to continue." }
+            const checkCard = await prisma.flashCard.findFirst({ where: { id: args.fc_id, userId: contextValue.user.id } });
+            if (!checkCard) return { message: `We can not find flash card with ${args.fc_id} in your account.` };
+            const editedCard = { question: args.question, answer: args.answer, topic: args.topic }
+            const updateFlashCard = await prisma.flashCard.update({ where: { id: args.fc_id }, data: editedCard });
+            if (updateFlashCard) {
+                return { message: "Flash card updated successfully", data: editedCard }
+            } else {
+                return { message: "Flash card not updated successfully." }
             }
         }
     }

@@ -48,6 +48,7 @@ export const typeDefs = `#graphql
         registerUser(username: String!, display_name: String!, password: String!): GeneralRegisterMessage!
         loginUser(username: String!, password: String!): GeneralLoginMessage!
         createFlashCard(question: String!, answer: String!, topic: String!): GeneralFlashMessage!
+        updateFlashCard(fc_id: Int!, question: String!, answer: String!, topic: String!): GeneralFlashMessage!
     }
 
 
