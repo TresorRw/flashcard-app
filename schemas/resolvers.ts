@@ -3,7 +3,7 @@ import type { UserProps, loggedInUser, loginUserProps, registerUserProps, single
 import { hashString } from "../utils/pwdChecker";
 import bcrypt from "bcrypt";
 import { encode } from "../utils/tokenCheck";
-import type { FlashCardProps, createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard";
+import type { FlashCardProps, TopicProp, createFlashCardProps, editFlashCardProps, singleFlashCardProp, statusFlashCardProps } from "../interfaces/Flashcard";
 
 const prisma = new PrismaClient();
 const authenticationCheck = (contextValue: loggedInUser) => {
@@ -36,6 +36,11 @@ export const resolvers = {
             } else {
                 return { message: "Flashcard not found.", data: null }
             }
+        },
+        async getFlashCardByTopic(_: any, args: TopicProp) {
+            const topic = args.topic;
+            const relatedByTopic = await prisma.flashCard.findMany({ where: { topic: { contains: topic, mode: "insensitive" } } })
+            return relatedByTopic;
         }
     },
 

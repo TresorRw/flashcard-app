@@ -29,3 +29,7 @@ export interface FlashCardProps {
     isComplete: boolean,
     userId: number
 }
+
+export interface TopicProp {
+    topic: string
+}

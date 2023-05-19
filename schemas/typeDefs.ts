@@ -52,6 +52,7 @@ export const typeDefs = `#graphql
         getFlashCards: [FlashCard!]
         getUserFlashCards(userId: Int!): [FlashCard]
         getSingleFlashCard(flashcard: Int!): FlashCardMessage!
+        getFlashCardByTopic(topic: String!): [FlashCard]
     }
 
     type Mutation {
