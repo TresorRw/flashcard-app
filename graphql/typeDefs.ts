@@ -5,17 +5,32 @@ export const typeDefs = `#graphql
         display_name: String!
         username: String!
         FlashCards: [FlashCard!]
+        Topics: [Topic!]
+    }
+
+    type Topic {
+        id: Int!
+        name: String!
+        description: String!
+        userId: Int!
+        User: User!
+        FlashCards: [FlashCard!]
+        createdAt: String
+        updatedAt: String
     }
 
     type FlashCard {
         id: Int!
         question: String!
         answer: String!
-        topic: String!
-        isComplete: Boolean!
-        addDate: String!
-        User: User!
+        isFlipped: Boolean!
+        reference: String!
+        User: User
         userId: Int!
+        Topic: Topic!
+        topicId: Int!
+        createdAt: String!
+        updatedAt: String!
     }
 
     # Messages
@@ -29,7 +44,13 @@ export const typeDefs = `#graphql
         message: String!
         data: FlashCard
     }
-
+    type TopicMessage {
+        message: String!
+        data: Topic
+    }
+    type updateDeletedMessage { 
+        message: String!
+    }
     type GeneralRegisterMessage {
         message: String!
         data: User
@@ -52,16 +73,24 @@ export const typeDefs = `#graphql
         getFlashCards: [FlashCard!]
         getUserFlashCards(userId: Int!): [FlashCard]
         getSingleFlashCard(flashcard: Int!): FlashCardMessage!
-        getFlashCardByTopic(topic: String!): [FlashCard]
+        getTopics: [Topic]
     }
 
     type Mutation {
+        # User mutations
         registerUser(username: String!, display_name: String!, password: String!): GeneralRegisterMessage!
         loginUser(username: String!, password: String!): GeneralLoginMessage!
-        createFlashCard(question: String!, answer: String!, topic: String!): GeneralFlashMessage!
-        updateFlashCard(fc_id: Int!, question: String!, answer: String!, topic: String!): GeneralFlashMessage!
-        deleteFlashCard(flashcard: Int!): GeneralFlashMessage!
+        
+        # Flashcard mutations
+        createFlashCard(reference: String!, question: String!, answer: String!, topicId: Int!): GeneralFlashMessage!
+        updateFlashCard(fc_id: Int!, question: String!, answer: String!, topic: String!): updateDeletedMessage!
+        deleteFlashCard(flashcard: Int!): updateDeletedMessage!
         changeStatus(fc_id: Int!, status: Boolean!): StatusChangeMessage!
+        
+        # Topic Mutations
+        createNewTopic(name: String!, description: String!): TopicMessage!
+        editTopic(tp_id: Int!, name: String!, description: String!): updateDeletedMessage!
+        deleteTopic(tp_id: Int!): updateDeletedMessage!
     }
 
 

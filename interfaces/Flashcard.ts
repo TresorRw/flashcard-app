@@ -1,14 +1,18 @@
 export interface createFlashCardProps {
-    question: string,
-    answer: string,
-    topic: string
+    id: number
+    question: string
+    answer: string
+    isFlipped: Boolean
+    reference: string
+    topicId: number
 }
 
 export interface editFlashCardProps {
     fc_id: number
-    question: string,
-    answer: string,
-    topic: string
+    question: string
+    answer: string
+    reference: string
+    topicId: number
 }
 
 export interface statusFlashCardProps {
@@ -21,15 +25,14 @@ export interface singleFlashCardProp {
 }
 
 export interface FlashCardProps {
-    id: number,
-    question: string,
-    answer: string,
-    topic: string,
-    addDate: string
-    isComplete: boolean,
+    id: number
+    question: String
+    answer: String
+    topic: String
+    isFlipped: Boolean
+    reference: String
     userId: number
-}
-
-export interface TopicProp {
-    topic: string
+    topicId: number
+    createdAt: Date
+    updatedAt: Date
 }

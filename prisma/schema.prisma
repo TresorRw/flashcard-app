@@ -14,15 +14,30 @@ model User {
   password     String
   regDate      DateTime    @default(now())
   FlashCards   FlashCard[]
+  Topic        Topic[]
+}
+
+model Topic {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  description String
+  FlashCards  FlashCard[]
+  User        User?       @relation(fields: [userId], references: [id])
+  userId      Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model FlashCard {
-  id         Int      @id @default(autoincrement())
-  question   String
-  answer     String
-  topic      String
-  addDate    DateTime @default(now())
-  isComplete Boolean  @default(false)
-  User       User?    @relation(fields: [userId], references: [id])
-  userId     Int?
+  id        Int      @id @default(autoincrement())
+  question  String
+  answer    String
+  isFlipped Boolean  @default(false)
+  reference String?
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  Topic     Topic?   @relation(fields: [topicId], references: [id])
+  topicId   Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
