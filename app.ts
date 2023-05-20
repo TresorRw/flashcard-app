@@ -15,7 +15,7 @@ const PORT: unknown = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 
-const server: ApolloServer = new ApolloServer<AppContext>({ typeDefs, resolvers });
+const server: ApolloServer = new ApolloServer<AppContext>({ typeDefs, resolvers, introspection: true });
 
 server
     .start()
