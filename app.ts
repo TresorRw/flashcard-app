@@ -20,6 +20,6 @@ const server: ApolloServer = new ApolloServer<AppContext>({ typeDefs, resolvers 
 server
     .start()
     .then(() => {
-        app.use('/graphql', expressMiddleware(server, { context: context.context }))
-        app.listen(PORT, () => console.log(`🚀 🛜    http://localhost:${PORT}/graphql`));
+        app.use('/', expressMiddleware(server, { context: context.context }))
+        app.listen(PORT, () => console.log(`🚀 🛜    http://localhost:${PORT}/`));
     })
