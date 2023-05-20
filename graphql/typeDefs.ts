@@ -93,5 +93,4 @@ export const typeDefs = `#graphql
         deleteTopic(tp_id: Int!): updateDeletedMessage!
     }
 
-
 `
